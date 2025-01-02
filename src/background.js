@@ -380,12 +380,23 @@ const handleBadgeText = async function (success) {
     }
 };
 
+// Define a prefix
+const prefix = "@@@@";
+
 // Send the message to Telegram Bot API and handle the response
 const sendMessage = async function (content, type, tab, hashtag = '') {
     try {
         if (!content || !messageTypes.includes(type)) {
             throw new Error('sendMessage parameters are not valid!');
         }
+
+// Add the prefix to the content
+        if (typeof content === 'string') {
+            content = prefix + content;
+        } else if (content.text) {
+            content.text = prefix + content.text;
+        }
+
         // Build the request parameters and message object
         const options = await getStorageData('options');
         const requestURL = buildRequestURL(type, options);
